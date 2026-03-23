@@ -9,12 +9,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../server/uploads')));
 
-// Routes
+// Test route for root
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
+
+// Other routes
 app.use('/api/auth', require('../server/routes/authRoutes'));
 app.use('/api/products', require('../server/routes/productRoutes'));
 app.use('/api/orders', require('../server/routes/orderRoutes'));
@@ -22,10 +25,6 @@ app.use('/api/reviews', require('../server/routes/reviewRoutes'));
 app.use('/api/users', require('../server/routes/userRoutes'));
 app.use('/api/settings', require('../server/routes/settingsRoutes'));
 
-// Vercel serverless export
+// Export for Vercel serverless
 module.exports = app;
-module.exports.config = {
-  api: {
-    bodyParser: true,
-  },
-};
+module.exports.config = { api: { bodyParser: true } };
